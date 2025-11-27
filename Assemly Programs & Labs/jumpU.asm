@@ -1,0 +1,9 @@
+org 100h
+
+L1:
+    mov ax, 5
+    mov bx, 3
+    jmp L1
+
+    mov ah, 4Ch
+    int 21h
