@@ -1,0 +1,87 @@
+[org 0x100]
+
+start:
+    lea bx, [num]    ; LEA: Load the memory address of 'num' into BX
+    mov cx, 3        ; MOV: Set our loop counter to 3
+
+do_loop:
+    inc bx           ; INC: Add 1 to the address in BX
+    dec cx           ; DEC: Subtract 1 from the counter in CX
+    
+    cmp cx, 0        ; CMP: Compare CX to 0
+    jnz do_loop      ; If CX is not zero, jump back to 'do_loop'
+
+    mov ax, 0x4c00   ; Exit program
+    int 0x21
+
+num: db 55           ; Just a dummy number to point at
+ 
+
+[org 0x100]
+
+    lea bx, [zeros]     ; Point to numbers
+    mov cx, 3           ; Try 3 times
+
+start_loopz:
+    cmp byte [bx], 0    ; Check if number is 0
+    lea bx, [bx+1]      ; Move to next number
+    
+    loopz start_loopz   ; Loop IF Zero (ZF=1) AND CX > 0
+
+    mov ax, 0x4c00      ; Exit
+    int 0x21
+
+zeros: db 0, 0, 5       ; The '5' stops the loop
+
+
+[org 0x100]
+
+    lea bx, [nums]      ; Point to numbers
+    mov cx, 3           ; Try 3 times
+    mov al, 1           ; We expect to see '1'
+
+start_loope:
+    cmp [bx], al        ; Compare memory with 1
+    lea bx, [bx+1]      ; Move to next number
+    
+    loope start_loope   ; Loop IF Equal (ZF=1) AND CX > 0
+
+    mov ax, 0x4c00      ; Exit
+    int 0x21
+
+nums: db 1, 1, 2        ; The '2' stops the loop
+
+
+[org 0x100]
+
+    lea bx, [nums]      ; Point to numbers
+    mov cx, 3           ; Try 3 times
+    mov al, 5           ; We are looking for '5'
+
+start_loopne:
+    cmp [bx], al        ; Compare memory with 5
+    lea bx, [bx+1]      ; Move to next number
+    
+    loopne start_loopne ; Loop IF Not Equal (ZF=0) AND CX > 0
+
+    mov ax, 0x4c00      ; Exit
+    int 0x21
+
+nums: db 1, 2, 5        ; The '5' makes them Equal, so the loop STOPS.
+
+
+[org 0x100]
+
+    lea bx, [vals]      ; Point to values
+    mov cx, 3           ; Try 3 times
+
+start_loopnz:
+    cmp byte [bx], 0    ; Check if number is 0
+    lea bx, [bx+1]      ; Move to next number
+    
+    loopnz start_loopnz ; Loop IF Not Zero (ZF=0) AND CX > 0
+
+    mov ax, 0x4c00      ; Exit
+    int 0x21
+
+vals: db 9, 8, 0        ; The '0' makes it Zero, so the loop STOPS.
